@@ -1,7 +1,7 @@
+import type { QueryClient } from "@tanstack/react-query";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import React from "react";
 import {
-  QueryClient,
   QueryClientProvider,
   queryOptions,
   useQueryErrorResetBoundary,
@@ -19,14 +19,14 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { httpBatchLink } from "@trpc/client";
 import ReactDOM from "react-dom/client";
 
-import trpc from "./utils/trpc";
+import { getQueryClient } from "./lib/react-query";
+import { api, TRPCReactProvider } from "./lib/trpc";
 
 const rootRoute = createRootRouteWithContext<{
   queryClient: QueryClient;
-  trpcClient: typeof trpc;
+  trpcClient: typeof api;
 }>()({
   component: RootComponent,
 });
@@ -77,7 +77,7 @@ function IndexRouteComponent() {
 
 const postsQueryOptions = queryOptions({
   queryKey: ["posts"],
-  queryFn: () => appRouter.post.all(),
+  queryFn: () => null,
 });
 
 const postsRoute = createRoute({
@@ -136,7 +136,7 @@ class NotFoundError extends Error {}
 const postQueryOptions = (postId: string) =>
   queryOptions({
     queryKey: ["posts", { postId }],
-    queryFn: () => fetchPost(postId),
+    queryFn: () => api.post.byId.useQuery({ id: postId }),
   });
 
 const postRoute = createRoute({
@@ -179,14 +179,14 @@ function PostRouteComponent() {
   const postQuery = useSuspenseQuery(postQueryOptions(postId));
   const post = postQuery.data;
 
-  if (!post) {
+  if (!post.data) {
     return null;
   }
 
   return (
     <div className="space-y-2">
-      <h4 className="text-xl font-bold underline">{post.title}</h4>
-      <div className="text-sm">{post.body}</div>
+      <h4 className="text-xl font-bold underline">{post.data.title}</h4>
+      <div className="text-sm">{post.data.body}</div>
     </div>
   );
 }
@@ -196,15 +196,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
 ]);
 
-const queryClient = new QueryClient();
-
-const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: "http://localhost:2022",
-    }),
-  ],
-});
+const queryClient = getQueryClient();
 
 // Set up a Router instance
 const router = createRouter({
@@ -215,7 +207,6 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
   context: {
     queryClient,
-    trpcClient,
   },
 });
 
@@ -236,11 +227,8 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
 
   root.render(
-    <trpc.Provider queryClient={queryClient} trpcClient={trpcClient}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-      ,
-    </trpc.Provider>,
+    <TRPCReactProvider>
+      <RouterProvider router={router} />
+    </TRPCReactProvider>,
   );
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "clean": "rm -rf .turbo node_modules",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -14,11 +15,11 @@
     "@tanstack/react-query": "^5.45.1",
     "@tanstack/react-query-devtools": "^5.45.1",
     "@tanstack/react-router": "^1.40.0",
-    "@trpc/client": "^10.45.2",
+    "@trpc/client": "11.0.0-rc.417",
     "@trpc/react-query": "11.0.0-rc.417",
-    "@trpc/server": "11.0.0-rc.364",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@trpc/server": "11.0.0-rc.417",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -31,10 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.7",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.5",
     "vite": "^5.3.1"
   },
   "prettier": "@repo/prettier-config"

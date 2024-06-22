@@ -23,6 +23,9 @@
       "dependsOn": ["^topo", "^build"],
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
+    "clean": {
+      "cache": false
+    },
     "push": {
       "cache": false,
       "interactive": true
