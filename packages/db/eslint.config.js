@@ -4,6 +4,7 @@ import baseConfig, { restrictEnvAccess } from "@repo/eslint-config/base";
 export default [
   {
     ignores: ["dist/**"],
+    files: ["env.ts", "drizzle.config.ts"]
   },
   ...baseConfig,
   ...restrictEnvAccess,

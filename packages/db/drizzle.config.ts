@@ -1,17 +1,11 @@
 import { defineConfig, type Config } from "drizzle-kit";
-import assert from "assert";
-
-
-assert(process.env.DB_URL, "POSTGRES_URL must be set")
-
-
-
+import { env } from "./env";
 
 export default defineConfig({
   schema: "./src/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DB_URL,
+    url: env.DB_URL,
   },
   verbose: true,
   strict: true,
