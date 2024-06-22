@@ -19,12 +19,14 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { httpBatchLink } from "@trpc/client";
 import ReactDOM from "react-dom/client";
 
-import { fetchPost, fetchPosts } from "./lib/data";
+import trpc from "./utils/trpc";
 
 const rootRoute = createRootRouteWithContext<{
   queryClient: QueryClient;
+  trpcClient: typeof trpc;
 }>()({
   component: RootComponent,
 });
@@ -75,7 +77,7 @@ function IndexRouteComponent() {
 
 const postsQueryOptions = queryOptions({
   queryKey: ["posts"],
-  queryFn: () => fetchPosts(),
+  queryFn: () => appRouter.post.all(),
 });
 
 const postsRoute = createRoute({
@@ -196,6 +198,14 @@ const routeTree = rootRoute.addChildren([
 
 const queryClient = new QueryClient();
 
+const trpcClient = trpc.createClient({
+  links: [
+    httpBatchLink({
+      url: "http://localhost:2022",
+    }),
+  ],
+});
+
 // Set up a Router instance
 const router = createRouter({
   routeTree,
@@ -205,6 +215,7 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
   context: {
     queryClient,
+    trpcClient,
   },
 });
 
@@ -225,8 +236,11 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
 
   root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>,
+    <trpc.Provider queryClient={queryClient} trpcClient={trpcClient}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+      ,
+    </trpc.Provider>,
   );
 }

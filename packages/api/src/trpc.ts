@@ -6,12 +6,12 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import { initTRPC, TRPCError } from "@trpc/server";
+import type { CreateHTTPContextOptions } from "@trpc/server/adapters/standalone";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@repo/db/client";
-import { CreateHTTPContextOptions } from "@trpc/server/adapters/standalone";
 
 // /**
 //  * Isomorphic Session getter for API requests

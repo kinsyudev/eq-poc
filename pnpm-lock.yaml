@@ -20,6 +20,9 @@ importers:
 
   apps/web-app:
     dependencies:
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@tanstack/react-query':
         specifier: ^5.45.1
         version: 5.45.1(react@18.3.1)
@@ -29,6 +32,15 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.40.0
         version: 1.40.0(react-dom@18.3.1)(react@18.3.1)
+      '@trpc/client':
+        specifier: ^10.45.2
+        version: 10.45.2(@trpc/server@11.0.0-rc.364)
+      '@trpc/react-query':
+        specifier: 11.0.0-rc.417
+        version: 11.0.0-rc.417(@tanstack/react-query@5.45.1)(@trpc/client@10.45.2)(@trpc/server@11.0.0-rc.364)(react-dom@18.3.1)(react@18.3.1)
+      '@trpc/server':
+        specifier: 11.0.0-rc.364
+        version: 11.0.0-rc.364
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -2405,6 +2417,30 @@ packages:
 
   /@tanstack/store@0.1.3:
     resolution: {integrity: sha512-GnolmC8Fr4mvsHE1fGQmR3Nm0eBO3KnZjDU0a+P3TeQNM/dDscFGxtA7p31NplQNW3KwBw4t1RVFmz0VeKLxcw==}
+
+  /@trpc/client@10.45.2(@trpc/server@11.0.0-rc.364):
+    resolution: {integrity: sha512-ykALM5kYWTLn1zYuUOZ2cPWlVfrXhc18HzBDyRhoPYN0jey4iQHEFSEowfnhg1RvYnrAVjNBgHNeSAXjrDbGwg==}
+    peerDependencies:
+      '@trpc/server': 10.45.2
+    dependencies:
+      '@trpc/server': 11.0.0-rc.364
+    dev: false
+
+  /@trpc/react-query@11.0.0-rc.417(@tanstack/react-query@5.45.1)(@trpc/client@10.45.2)(@trpc/server@11.0.0-rc.364)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-JDCAeWDGhA6m9OMguT5N0Weqtdlk9tS5WAH2zMr8TymiVJWuIDp7PbbLn3XfHF0BgFODrMw+tC45+vlqLPjDGw==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.40.0
+      '@trpc/client': 11.0.0-rc.417+94650c185
+      '@trpc/server': 11.0.0-rc.417+94650c185
+      react: '>=18.2.0'
+      react-dom: '>=18.2.0'
+    dependencies:
+      '@tanstack/react-query': 5.45.1(react@18.3.1)
+      '@trpc/client': 10.45.2(@trpc/server@11.0.0-rc.364)
+      '@trpc/server': 11.0.0-rc.364
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
 
   /@trpc/server@11.0.0-rc.364:
     resolution: {integrity: sha512-sGlrb2jSCiU74TrJ+N+WxIcJIUDyo0WOy0y30vIArw6oHFXjeithgxjvIu+PbN+VWt/Gt4ee8kVhnmxCW4X/Qw==}
