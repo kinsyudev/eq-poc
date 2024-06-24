@@ -17,3 +17,5 @@ createHTTPServer({
   router: appRouter,
   createContext: createTRPCContext,
 }).listen(2022);
+
+console.log("Listening on http://localhost:2022");

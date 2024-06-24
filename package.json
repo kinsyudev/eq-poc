@@ -1,12 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "dotenv -- turbo run build",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",
-    "db:push": "turbo -F @repo/db push",
-    "db:studio": "turbo -F @repo/db studio",
-    "dev": "turbo watch dev",
+    "db:push": "dotenv -- turbo -F @repo/db push",
+    "db:studio": "dotenv -- turbo -F @repo/db studio",
+    "dev": "dotenv -- turbo watch dev",
     "format": "turbo run format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
     "format:fix": "turbo run format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
     "lint": "turbo run lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
@@ -24,5 +24,8 @@
     "turbo": "^2.0.4"
   },
   "packageManager": "pnpm@9.2.0",
-  "name": "eq-poc"
+  "name": "eq-poc",
+  "dependencies": {
+    "dotenv-cli": "^7.4.2"
+  }
 }

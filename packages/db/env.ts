@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-   DB_URL: z.string().min(1),
+    DB_URL: z.string().min(1),
     NODE_ENV: z.enum(["development", "production"]).optional(),
   },
   client: {},

@@ -9,8 +9,6 @@ import type { AppRouter } from "@repo/api";
 import { getQueryClient } from "./react-query";
 
 const getBaseUrl = () => {
-  if (typeof window !== "undefined") return window.location.origin;
-
   return `http://localhost:${2022}`;
 };
 

@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
+    "dev": "tsx src/server.ts",
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
@@ -24,6 +24,7 @@
     "@trpc/server": "11.0.0-rc.417",
     "cors": "^2.8.5",
     "superjson": "2.2.1",
+    "tsx": "^4.15.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
