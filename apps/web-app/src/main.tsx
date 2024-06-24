@@ -2,7 +2,6 @@ import type { QueryClient } from "@tanstack/react-query";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import React from "react";
 import {
-  QueryClientProvider,
   queryOptions,
   useQueryErrorResetBoundary,
   useSuspenseQuery,
@@ -22,11 +21,10 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import ReactDOM from "react-dom/client";
 
 import { getQueryClient } from "./lib/react-query";
-import { api, TRPCReactProvider } from "./lib/trpc";
+import { clientUtils, TRPCReactProvider } from "./lib/trpc";
 
 const rootRoute = createRootRouteWithContext<{
   queryClient: QueryClient;
-  trpcClient: typeof api;
 }>()({
   component: RootComponent,
 });
@@ -77,7 +75,7 @@ function IndexRouteComponent() {
 
 const postsQueryOptions = queryOptions({
   queryKey: ["posts"],
-  queryFn: () => null,
+  queryFn: () => clientUtils.post.all.fetch(),
 });
 
 const postsRoute = createRoute({
@@ -86,12 +84,17 @@ const postsRoute = createRoute({
   loader: ({ context: { queryClient } }) =>
     queryClient.ensureQueryData(postsQueryOptions),
   component: PostsRouteComponent,
+  errorComponent: PostErrorComponent,
 });
 
 function PostsRouteComponent() {
   const postsQuery = useSuspenseQuery(postsQueryOptions);
 
   const posts = postsQuery.data;
+
+  if (!posts) {
+    return null;
+  }
 
   return (
     <div className="flex gap-2 p-2">
@@ -136,7 +139,7 @@ class NotFoundError extends Error {}
 const postQueryOptions = (postId: string) =>
   queryOptions({
     queryKey: ["posts", { postId }],
-    queryFn: () => api.post.byId.useQuery({ id: postId }),
+    queryFn: () => clientUtils.post.byId.fetch({ id: postId }),
   });
 
 const postRoute = createRoute({
@@ -179,14 +182,14 @@ function PostRouteComponent() {
   const postQuery = useSuspenseQuery(postQueryOptions(postId));
   const post = postQuery.data;
 
-  if (!post.data) {
+  if (!post) {
     return null;
   }
 
   return (
     <div className="space-y-2">
-      <h4 className="text-xl font-bold underline">{post.data.title}</h4>
-      <div className="text-sm">{post.data.body}</div>
+      <h4 className="text-xl font-bold underline">{post.title}</h4>
+      <div className="text-sm">{post.body}</div>
     </div>
   );
 }
